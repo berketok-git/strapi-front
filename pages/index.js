@@ -1,0 +1,60 @@
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
+
+const Todo = () => {
+  const [todos, setTodos] = useState([])
+  const [newTodo, setNewTodo] = useState('')
+
+  useEffect(() => {
+    const fetchTodos = async () => {
+      const res = await axios.get('http://localhost:1337/api/todos')
+      setTodos(res.data.data)
+    }
+    fetchTodos()
+    console.log(todos)
+  }, [])
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!newTodo) return;
+    const res = await axios
+      .post("http://localhost:1337/api/todos", {data:{
+        task: newTodo
+      }})
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+      window.location.reload(true)
+  };
+
+  const handleDelete = async (id) => {
+    await axios.delete(`http://localhost:1337/api/todos/${id}`)
+    setTodos(todos.filter((t) => t.id !== id))
+  }
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={newTodo}
+          onChange={(e) => setNewTodo(e.target.value)}
+        />
+        <button type="submit">Add Todo</button>
+      </form>
+      <ul>
+        {todos.map((t) => (
+          <li key={t.id}>
+            {t.attributes.task}
+            <button onClick={() => handleDelete(t.id)}>X</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+export default Todo
