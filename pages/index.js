@@ -7,7 +7,7 @@ const Todo = () => {
 
   useEffect(() => {
     const fetchTodos = async () => {
-      const res = await axios.get("http://mic-d-loadb-1enycy75ctzrh-1557989190.eu-west-3.elb.amazonaws.com/api/todos");
+      const res = await axios.get("https://api.berketok.com/api/todos");
       setTodos(res.data.data);
     };
     console.log(todos);
@@ -18,7 +18,7 @@ const Todo = () => {
     e.preventDefault();
     if (!newTodo) return;
     const res = await axios
-      .post("http://mic-d-loadb-1enycy75ctzrh-1557989190.eu-west-3.elb.amazonaws.com/api/todos", {
+      .post("https://api.berketok.com/api/todos", {
         data: {
           task: newTodo,
         },
@@ -34,7 +34,7 @@ const Todo = () => {
   };
 
   const handleDelete = async (id) => {
-    await axios.delete(`http://mic-d-loadb-1enycy75ctzrh-1557989190.eu-west-3.elb.amazonaws.com/api/todos/${id}`);
+    await axios.delete(`https://api.berketok.com/api/todos/${id}`);
     setTodos(todos.filter((t) => t.id !== id));
   };
 
